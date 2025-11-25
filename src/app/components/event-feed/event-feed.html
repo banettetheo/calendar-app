@@ -1,0 +1,43 @@
+<div class="feed-container h-full overflow-y-auto overflow-x-hidden bg-white box-border p-8">
+    <div class="feed-header mb-8 text-primary border-b border-border-default pb-4">
+        <h1 class="text-4xl m-0 mb-2 font-semibold">Discover Events</h1>
+        <p class="text-lg text-secondary m-0">Find and subscribe to events happening around you.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-16">
+        <div *ngFor="let event of events"
+            class="event-card flex flex-col overflow-hidden transition-all duration-200 bg-white border border-border-default rounded-md shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-border-subtle">
+            <div class="card-image h-45 bg-cover bg-center relative border-b border-border-default"
+                [style.background-image]="'url(' + event.image + ')'">
+                <div
+                    class="date-badge absolute top-4 right-4 flex flex-col items-center p-2 px-3 bg-white border border-border-default rounded-md text-primary font-semibold leading-tight shadow-sm">
+                    <span class="month text-xs uppercase text-secondary">{{ event.date | date:'MMM' }}</span>
+                    <span class="day text-xl">{{ event.date | date:'dd' }}</span>
+                </div>
+            </div>
+
+            <div class="card-content p-5 flex flex-col flex-1">
+                <div class="organizer text-sm text-secondary font-semibold uppercase mb-2">{{ event.organizer }}</div>
+                <h2 class="m-0 mb-2 text-xl font-semibold leading-snug text-accent-fg cursor-pointer transition-all duration-200 hover:underline hover:text-primary-orange"
+                    (click)="viewEventDetails(event)">{{ event.title }}</h2>
+                <div class="location flex items-center gap-1 text-sm text-secondary mb-3">
+                    <mat-icon class="text-lg w-[18px] h-[18px]">location_on</mat-icon>
+                    {{ event.location }}
+                </div>
+                <p class="description text-base leading-relaxed text-primary m-0 mb-5 flex-1">{{ event.description }}
+                </p>
+
+                <div class="actions flex justify-between items-center border-t border-border-default pt-4">
+                    <button mat-flat-button [color]="event.subscribed ? 'accent' : 'primary'"
+                        (click)="toggleSubscription(event)" class="rounded-md shadow-none border border-gray-300">
+                        <mat-icon>{{ event.subscribed ? 'check' : 'add' }}</mat-icon>
+                        {{ event.subscribed ? 'Subscribed' : 'Subscribe' }}
+                    </button>
+                    <button mat-icon-button>
+                        <mat-icon>share</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

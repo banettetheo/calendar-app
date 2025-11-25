@@ -1,0 +1,110 @@
+// Custom Theming for Angular Material
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Tailwind CSS - must come after @use rules
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Define the palettes for your theme using the Material 2 system
+$calendar-app-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$calendar-app-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+$calendar-app-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$calendar-app-theme: mat.m2-define-light-theme((color: (primary: $calendar-app-primary,
+        accent: $calendar-app-accent,
+        warn: $calendar-app-warn,
+      ),
+      typography: mat.m2-define-typography-config(),
+      density: 0,
+    ));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($calendar-app-theme);
+
+/* Modern Startup Theme Variables */
+:root {
+  --primary-blue: #3b82f6;
+  --primary-orange: #f97316;
+  --dark-blue: #1e40af;
+  --light-blue: #60a5fa;
+  --dark-orange: #ea580c;
+  --light-orange: #fb923c;
+
+  --bg-canvas: #ffffff;
+  --bg-subtle: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+
+  --border-default: #e2e8f0;
+  --border-accent: rgba(249, 115, 22, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-on-gradient: #ffffff;
+
+  --accent-gradient: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-orange) 100%);
+  --sidebar-width: 250px;
+  --header-height: 60px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+}
+
+.glass-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-gradient);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--dark-blue) 0%, var(--dark-orange) 100%);
+  background-clip: padding-box;
+}

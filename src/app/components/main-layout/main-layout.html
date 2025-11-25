@@ -1,0 +1,25 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isOpened" class="sidenav">
+    <div class="logo-area">
+      <h2>GlassCalendar</h2>
+    </div>
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="active-link"
+        (click)="isMobile && sidenav.close()">
+        <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+        <span matListItemTitle>{{item.label}}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content-area">
+    <!-- Floating bubble button for mobile -->
+    <button mat-fab class="mobile-menu-bubble" *ngIf="isMobile" (click)="toggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="page-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
