@@ -1,0 +1,72 @@
+<div class="landing-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            Glass<span class="highlight">Calendar</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+            <button mat-stroked-button (click)="launchApp()">Login</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Experience the Future of <br>
+                <span class="gradient-text">Event Management</span>
+            </h1>
+            <p class="hero-subtitle">
+                A beautiful, intuitive, and powerful calendar application designed for modern teams and individuals.
+                Plan, connect, and celebrate like never before.
+            </p>
+            <div class="hero-actions">
+                <button mat-flat-button color="primary" class="cta-button" (click)="launchApp()">
+                    Get Started Free
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+                <button mat-stroked-button class="secondary-button">
+                    View Demo
+                </button>
+            </div>
+        </div>
+
+        <!-- Abstract Visual/Decoration -->
+        <div class="hero-visual">
+            <div class="glass-card card-1">
+                <div class="card-header">
+                    <div class="circle red"></div>
+                    <div class="circle yellow"></div>
+                    <div class="circle green"></div>
+                </div>
+                <div class="card-body">
+                    <div class="skeleton-line w-3/4"></div>
+                    <div class="skeleton-line w-1/2"></div>
+                </div>
+            </div>
+            <div class="glass-card card-2">
+                <mat-icon class="card-icon">event</mat-icon>
+                <span>Meeting at 10:00 AM</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="feature-card glass-panel" *ngFor="let feature of features">
+            <div class="icon-wrapper">
+                <mat-icon>{{ feature.icon }}</mat-icon>
+            </div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 GlassCalendar. All rights reserved.</p>
+    </footer>
+</div>
