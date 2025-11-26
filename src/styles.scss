@@ -66,6 +66,13 @@ body {
   color: var(--text-primary);
 }
 
+/* Global Box Sizing Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .glass-panel {
   background: var(--bg-card);
   border: 1px solid var(--border-default);

@@ -7,58 +7,85 @@
             <h1>{{ event.title }}</h1>
         </div>
 
-        <div class="event-image" *ngIf="getImage()">
-            <img [src]="getImage()" [alt]="event.title">
-        </div>
+        <mat-tab-group animationDuration="0ms" class="custom-tabs">
+            <!-- Information Tab -->
+            <mat-tab label="Informations">
+                <div class="tab-content">
+                    <div class="event-image" *ngIf="getImage()">
+                        <img [src]="getImage()" [alt]="event.title">
+                    </div>
 
-        <div class="event-info">
-            <div class="info-row">
-                <mat-icon>event</mat-icon>
-                <div class="info-content">
-                    <span class="label">Date</span>
-                    <span class="value">{{ formatDate(event.date) }}</span>
+                    <div class="event-info">
+                        <div class="info-row">
+                            <mat-icon>event</mat-icon>
+                            <div class="info-content">
+                                <span class="label">Date</span>
+                                <span class="value">{{ formatDate(event.date) }}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-row" *ngIf="getTime()">
+                            <mat-icon>schedule</mat-icon>
+                            <div class="info-content">
+                                <span class="label">Heure</span>
+                                <span class="value">{{ getTime() }}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-row" *ngIf="getLocation()">
+                            <mat-icon>location_on</mat-icon>
+                            <div class="info-content">
+                                <span class="label">Lieu</span>
+                                <span class="value">{{ getLocation() }}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-row" *ngIf="getOrganizer()">
+                            <mat-icon>person</mat-icon>
+                            <div class="info-content">
+                                <span class="label">Organisateur</span>
+                                <span class="value">{{ getOrganizer() }}</span>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h2>Description</h2>
+                            <p>{{ event.description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button mat-flat-button color="primary" class="gradient-button">
+                            <mat-icon>add_to_calendar</mat-icon>
+                            Ajouter au calendrier
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </mat-tab>
 
-            <div class="info-row" *ngIf="getTime()">
-                <mat-icon>schedule</mat-icon>
-                <div class="info-content">
-                    <span class="label">Heure</span>
-                    <span class="value">{{ getTime() }}</span>
+            <!-- Chat Tab -->
+            <mat-tab label="Chat">
+                <div class="chat-container">
+                    <div class="messages-list">
+                        <div *ngFor="let msg of chatMessages" class="message-bubble" [class.me]="msg.isMe">
+                            <div class="sender" *ngIf="!msg.isMe">{{ msg.sender }}</div>
+                            <div class="text">{{ msg.text }}</div>
+                            <div class="time">{{ msg.time | date:'shortTime' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <input matInput placeholder="Type a message..." [(ngModel)]="newMessage"
+                                (keyup.enter)="sendMessage()">
+                            <button mat-icon-button matSuffix (click)="sendMessage()" [disabled]="!newMessage.trim()">
+                                <mat-icon>send</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
                 </div>
-            </div>
-
-            <div class="info-row" *ngIf="getLocation()">
-                <mat-icon>location_on</mat-icon>
-                <div class="info-content">
-                    <span class="label">Lieu</span>
-                    <span class="value">{{ getLocation() }}</span>
-                </div>
-            </div>
-
-            <div class="info-row" *ngIf="getOrganizer()">
-                <mat-icon>person</mat-icon>
-                <div class="info-content">
-                    <span class="label">Organisateur</span>
-                    <span class="value">{{ getOrganizer() }}</span>
-                </div>
-            </div>
-
-            <div class="description-section">
-                <h2>Description</h2>
-                <p>{{ event.description }}</p>
-            </div>
-        </div>
-
-        <div class="actions">
-            <button mat-flat-button color="primary" class="gradient-button">
-                <mat-icon>add_to_calendar</mat-icon>
-                Ajouter au calendrier
-            </button>
-            <button mat-stroked-button (click)="goBack()">
-                Retour
-            </button>
-        </div>
+            </mat-tab>
+        </mat-tab-group>
     </div>
 </div>
 

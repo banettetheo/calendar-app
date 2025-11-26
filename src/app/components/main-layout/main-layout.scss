@@ -19,29 +19,35 @@
     flex-direction: column;
     border: 1px solid var(--border-default);
 
-    .logo-area {
+    .logo-container {
         padding: 24px 16px;
         border-bottom: 1px solid var(--border-default);
 
-        h2 {
+        .logo-text {
             margin: 0;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
             font-weight: 700;
             font-size: 18px;
             letter-spacing: -0.5px;
+            color: var(--text-primary);
+
+            .highlight {
+                background: var(--accent-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
         }
     }
 
-    mat-nav-list {
+    .nav-list {
         padding-top: 16px;
         flex: 1;
         overflow-y: auto;
         overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
 
-        a {
+        .nav-item {
             color: var(--text-secondary);
             margin: 6px 12px;
             border-radius: 12px;
@@ -51,6 +57,8 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            text-decoration: none; // Ensure no underline
+            padding: 0 16px; // Add padding for icon spacing
 
             &::before {
                 content: '';
@@ -73,7 +81,7 @@
                 }
             }
 
-            &.active-link {
+            &.active {
                 background: var(--accent-gradient);
                 color: white;
                 font-weight: 600;
@@ -92,13 +100,54 @@
                 height: 20px;
                 position: relative;
                 z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
-            span {
+            .label {
                 font-size: 14px;
                 font-weight: 500;
                 position: relative;
                 z-index: 1;
+            }
+        }
+    }
+
+    .user-profile {
+        padding: 16px;
+        border-top: 1px solid var(--border-default);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: auto; // Push to bottom
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+
+            .name {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+
+            .role {
+                font-size: 12px;
+                color: var(--text-secondary);
             }
         }
     }
@@ -113,38 +162,69 @@
 
 .content-area {
     background: var(--bg-canvas);
-    padding: 12px 20px 20px 20px;
+    padding: 12px 36px 24px 36px;
     height: 100vh;
     overflow: hidden;
     position: relative;
 
     @media (max-width: 768px) {
-        padding: 12px;
+        padding: 12px 12px 80px 12px; // Added bottom padding for nav bar
     }
 }
 
-.mobile-menu-bubble {
+// Mobile Bottom Navigation
+.bottom-nav {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border-default);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     z-index: 1000;
-    background: var(--accent-gradient) !important;
-    color: white !important;
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-    transition: all 0.3s ease;
+    padding-bottom: env(safe-area-inset-bottom); // For iPhone X+
 
-    &:hover {
-        box-shadow: 0 6px 28px rgba(59, 130, 246, 0.5);
-        transform: scale(1.05);
-    }
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: 10px;
+        gap: 4px;
+        flex: 1;
+        height: 100%;
+        transition: all 0.2s ease;
 
-    &:active {
-        transform: scale(0.95);
-    }
+        mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+            margin: 0;
+        }
 
-    mat-icon {
-        color: white;
+        &.active {
+            color: var(--primary-blue);
+
+            mat-icon {
+                color: var(--primary-blue);
+            }
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
     }
+}
+
+// Hide sidenav on mobile
+.sidenav.hidden {
+    display: none !important;
 }
 
 .page-container {

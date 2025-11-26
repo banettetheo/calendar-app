@@ -14,10 +14,23 @@ interface CalendarEvent {
   date: Date;
 }
 
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule
+  ],
   templateUrl: './event-details.html',
   styleUrl: './event-details.scss',
 })
@@ -86,5 +99,25 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
 
   getTime(): string | undefined {
     return !this.isFeedEvent && this.event ? (this.event as CalendarEvent).time : undefined;
+  }
+
+  // Chat Logic
+  chatMessages: { sender: string, text: string, isMe: boolean, time: Date }[] = [
+    { sender: 'Alice', text: 'Hey! Are you going to this event?', isMe: false, time: new Date(Date.now() - 3600000) },
+    { sender: 'Me', text: 'Yes, I just subscribed!', isMe: true, time: new Date(Date.now() - 1800000) },
+    { sender: 'Bob', text: 'Awesome, see you there!', isMe: false, time: new Date(Date.now() - 900000) }
+  ];
+  newMessage = '';
+
+  sendMessage() {
+    if (this.newMessage.trim()) {
+      this.chatMessages.push({
+        sender: 'Me',
+        text: this.newMessage,
+        isMe: true,
+        time: new Date()
+      });
+      this.newMessage = '';
+    }
   }
 }
