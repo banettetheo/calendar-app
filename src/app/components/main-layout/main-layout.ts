@@ -1,12 +1,14 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'app-main-layout',
@@ -33,10 +35,15 @@ export class MainLayoutComponent implements OnInit {
 
   isMobile = false;
   isOpened = true;
+  userProfile: KeycloakProfile | null = null;
 
-  constructor(private breakpointObserver: BreakpointObserver) { }
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private keycloak: KeycloakService,
+    private router: Router
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet])
       .subscribe(result => {
         this.isMobile = result.matches;
@@ -49,9 +56,19 @@ export class MainLayoutComponent implements OnInit {
           }
         }
       });
+
+    // Load user profile
+    const isLoggedIn = await this.keycloak.isLoggedIn();
+    if (isLoggedIn) {
+      this.userProfile = await this.keycloak.loadUserProfile();
+    }
   }
 
   toggleSidenav() {
     this.sidenav.toggle();
+  }
+
+  async logout() {
+    await this.keycloak.logout(window.location.origin);
   }
 }

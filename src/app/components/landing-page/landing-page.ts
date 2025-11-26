@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
     selector: 'app-landing-page',
@@ -30,9 +31,20 @@ export class LandingPageComponent {
         }
     ];
 
-    constructor(private router: Router) { }
+    constructor(
+        private router: Router,
+        private keycloak: KeycloakService
+    ) { }
 
-    launchApp() {
-        this.router.navigate(['/calendar']);
+    async launchApp() {
+        const isLoggedIn = await this.keycloak.isLoggedIn();
+
+        if (isLoggedIn) {
+            this.router.navigate(['/calendar']);
+        } else {
+            await this.keycloak.login({
+                redirectUri: window.location.origin + '/calendar'
+            });
+        }
     }
 }
