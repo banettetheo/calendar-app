@@ -47,4 +47,10 @@ export class LandingPageComponent {
             });
         }
     }
+
+    async signup() {
+        await this.keycloak.register({
+            redirectUri: window.location.origin + '/calendar'
+        });
+    }
 }

@@ -12,12 +12,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-y: auto;
 }
 
 /* Login Container */
 #kc-container {
     max-width: 480px;
     width: 100%;
+    margin: auto;
 }
 
 /* Login Card */
@@ -29,6 +31,8 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     padding: 40px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
 }
 
 /* Header */

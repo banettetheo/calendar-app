@@ -62,7 +62,39 @@ Download from: https://www.keycloak.org/downloads
 11. Temporary: `OFF`
 12. Click **Save**
 
-### 4. Install Custom Theme
+### 4. Enable User Registration
+
+1. Go to **Realm Settings** → **Login** tab
+2. Enable the following options:
+   - ✅ **User registration** - Allows new users to sign up
+   - ✅ **Forgot password** - Enables password reset
+   - ✅ **Remember me** - Allows users to stay logged in
+   - ✅ **Login with email** - Allows login with email instead of username
+3. Click **Save**
+
+#### Optional: Email Verification (Recommended for Production)
+
+To require email verification for new users:
+
+1. In **Realm Settings** → **Login**:
+   - ✅ **Verify email** - Forces email verification
+2. Go to **Realm Settings** → **Email** tab
+3. Configure SMTP settings:
+   - **Host**: Your SMTP server (e.g., `smtp.gmail.com`)
+   - **Port**: Usually `587` for TLS
+   - **From**: Email address for sending (e.g., `noreply@yourdomain.com`)
+   - **From Display Name**: `Calendar App`
+   - **Enable SSL**: OFF
+   - **Enable StartTLS**: ON
+   - **Enable Authentication**: ON
+   - **Username**: Your SMTP username
+   - **Password**: Your SMTP password
+4. Click **Save**
+5. Test the configuration by clicking **Test connection**
+
+> **Note**: For development, you can skip email verification. For production, it's highly recommended to enable it.
+
+### 5. Install Custom Theme
 
 ```bash
 # Copy theme to Keycloak
@@ -85,10 +117,10 @@ Then in Keycloak Admin Console:
 npm run start
 ```
 
-### 2. Test Flow
+### 2. Test Login Flow
 
 1. Navigate to http://localhost:4200
-2. Click **"Get Started Free"** button
+2. Click **"Login"** button in navbar
 3. You should be redirected to Keycloak login with custom theme
 4. Login with:
    - Username: `testuser`
@@ -96,6 +128,22 @@ npm run start
 5. You should be redirected back to `/calendar`
 6. Check sidebar - your name should appear
 7. Click **Logout** - you should return to landing page
+
+### 3. Test Sign Up Flow
+
+1. Navigate to http://localhost:4200
+2. Click **"Sign Up"** button in navbar or **"Get Started Free"** button
+3. You should be redirected to Keycloak registration page with custom theme
+4. Fill in the registration form:
+   - Username: Choose a unique username
+   - Password: Choose a secure password
+   - Confirm password: Re-enter your password
+   - Email: Enter a valid email
+   - First name: Your first name
+   - Last name: Your last name
+5. Click **Register**
+6. You should be automatically logged in and redirected to `/calendar`
+7. Your name should appear in the sidebar
 
 ## Troubleshooting
 
