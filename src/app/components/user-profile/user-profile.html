@@ -1,4 +1,4 @@
-<div class="profile-container fade-in">
+<div class="profile-container fade-in" *ngIf="!isLoading && user">
     <!-- Header Section -->
     <div class="profile-header">
         <div class="banner"></div>
@@ -9,13 +9,13 @@
             </div>
 
             <div class="user-identity">
-                <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+                <h1>{{ user.username }}</h1>
                 <div class="badges">
-                    <span class="role-badge">
+                    <span class="role-badge" *ngIf="user.jobTitle">
                         <mat-icon>work</mat-icon>
                         {{ user.jobTitle }}
                     </span>
-                    <span class="location-badge">
+                    <span class="location-badge" *ngIf="user.location">
                         <mat-icon>place</mat-icon>
                         {{ user.location }}
                     </span>
@@ -23,7 +23,7 @@
             </div>
 
             <div class="actions">
-                <button mat-stroked-button class="edit-btn">
+                <button mat-stroked-button class="edit-btn" (click)="editAccount()">
                     <mat-icon>edit</mat-icon>
                     Modifier
                 </button>
@@ -39,42 +39,50 @@
         <!-- Left Column: Info & Skills -->
         <div class="main-info">
             <!-- Stats Cards -->
-            <div class="stats-row">
+            <div class="stats-row" *ngIf="user.stats">
                 <div class="stat-card">
-                    <div class="stat-value">{{ user.stats.projectsCompleted }}</div>
+                    <div class="stat-value">{{ user.stats?.projectsCompleted || 0 }}</div>
                     <div class="stat-label">Projets</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">{{ user.stats.hoursLogged }}h</div>
+                    <div class="stat-value">{{ user.stats?.hoursLogged || 0 }}h</div>
                     <div class="stat-label">Heures</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">{{ user.stats.efficiency }}%</div>
+                    <div class="stat-value">{{ user.stats?.efficiency || 0 }}%</div>
                     <div class="stat-label">Efficacité</div>
                 </div>
             </div>
 
             <div class="info-card">
                 <h3>À propos</h3>
-                <p class="bio">{{ user.bio }}</p>
+                <p class="bio" *ngIf="user.bio">{{ user.bio }}</p>
 
                 <div class="details-list">
+                    <div class="detail-item">
+                        <span class="label">Prénom</span>
+                        <span class="value">{{ user.firstName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Nom</span>
+                        <span class="value">{{ user.lastName }}</span>
+                    </div>
                     <div class="detail-item">
                         <span class="label">Email</span>
                         <span class="value">{{ user.email }}</span>
                     </div>
-                    <div class="detail-item">
+                    <div class="detail-item" *ngIf="user.department">
                         <span class="label">Département</span>
                         <span class="value">{{ user.department }}</span>
                     </div>
-                    <div class="detail-item">
+                    <div class="detail-item" *ngIf="user.parsedJoinedDate">
                         <span class="label">Membre depuis</span>
-                        <span class="value">{{ user.joinDate | date:'longDate' }}</span>
+                        <span class="value">{{ user.parsedJoinedDate | date:'longDate' }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="info-card">
+            <div class="info-card" *ngIf="user.skills && user.skills.length > 0">
                 <h3>Compétences</h3>
                 <div class="skills-wrapper">
                     <span *ngFor="let skill of user.skills" class="skill-chip">
@@ -85,7 +93,7 @@
         </div>
 
         <!-- Right Column: Projects & Activity -->
-        <div class="secondary-info">
+        <div class="secondary-info" *ngIf="user.projects && user.projects.length > 0">
             <div class="info-card projects-card">
                 <div class="card-header">
                     <h3>Projets Récents</h3>

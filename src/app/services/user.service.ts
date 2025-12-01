@@ -24,14 +24,14 @@ export class UserService {
             map(([profile, apiUser]) => {
                 return {
                     ...apiUser,
-                    id: profile.id || apiUser.id,
-                    username: profile.username || '',
-                    email: profile.email || apiUser.email,
-                    firstName: profile.firstName || apiUser.firstName,
-                    lastName: profile.lastName || apiUser.lastName,
+                    id: profile.id,
+                    username: profile.username,
+                    email: profile.email,
+                    firstName: profile.firstName,
+                    lastName: profile.lastName,
                     roles: this.keycloak.getUserRoles(),
-                    originalJoinDate: apiUser.joinDate,
-                    parsedJoinDate: new Date(apiUser.joinDate)
+                    originalJoinedDate: apiUser.joinedDate,
+                    parsedJoinedDate: new Date(apiUser.joinedDate)
                 } as UnifiedUser;
             })
         );
