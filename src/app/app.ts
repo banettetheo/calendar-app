@@ -19,8 +19,8 @@ export class App implements OnInit {
 
   async ngOnInit() {
     if (await this.keycloakService.isLoggedIn()) {
-      this.userService.getMe().subscribe({
-        next: (user) => console.log('User profile:', user),
+      this.userService.loadAndSetCurrentUser().subscribe({
+        next: (user) => console.log('User profile loaded:', user),
         error: (err) => console.error('Error fetching user profile:', err)
       });
     }

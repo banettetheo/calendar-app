@@ -61,12 +61,17 @@ export class MainLayoutComponent implements OnInit {
         }
       });
 
-    // Load user profile using UserService to get unified data
-    this.userService.getMe().subscribe({
+    // Subscribe to the reactive user stream - updates automatically when user data changes
+    this.userService.currentUser$.subscribe({
       next: (user) => {
         this.userProfile = user;
       },
       error: (err) => console.error('Error loading profile in layout:', err)
+    });
+
+    // Initial load of user data
+    this.userService.loadAndSetCurrentUser().subscribe({
+      error: (err) => console.error('Error loading initial profile:', err)
     });
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, from, map, switchMap, zip } from 'rxjs';
+import { Observable, from, map, switchMap, zip, BehaviorSubject, tap } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
 import { UnifiedUser, BusinessUser } from '../models/user.model';
 
@@ -11,11 +11,52 @@ import { UnifiedUser, BusinessUser } from '../models/user.model';
 export class UserService {
     private apiUrl = environment.apiUrl;
 
+    // BehaviorSubject to hold the current user state
+    private currentUserSubject = new BehaviorSubject<UnifiedUser | null>(null);
+
+    // Observable that components can subscribe to
+    public currentUser$ = this.currentUserSubject.asObservable();
+
     constructor(
         private http: HttpClient,
         private keycloak: KeycloakService
     ) { }
 
+    /**
+     * Load user data and update the BehaviorSubject
+     * This will notify all subscribers automatically
+     */
+    loadAndSetCurrentUser(): Observable<UnifiedUser> {
+        return this.getMe().pipe(
+            tap(user => this.currentUserSubject.next(user))
+        );
+    }
+
+    /**
+     * Get the current user value synchronously
+     */
+    getCurrentUserValue(): UnifiedUser | null {
+        return this.currentUserSubject.value;
+    }
+
+    /**
+     * Update the current user in the BehaviorSubject
+     * Use this after profile updates to propagate changes
+     */
+    updateCurrentUser(updates: Partial<UnifiedUser>): void {
+        const currentUser = this.currentUserSubject.value;
+        if (currentUser) {
+            this.currentUserSubject.next({
+                ...currentUser,
+                ...updates
+            });
+        }
+    }
+
+    /**
+     * Fetch user data from Keycloak and API
+     * This is the base method, prefer using loadAndSetCurrentUser() in components
+     */
     getMe(): Observable<UnifiedUser> {
         const keycloakProfile$ = from(this.keycloak.loadUserProfile());
         const apiUser$ = this.http.get<BusinessUser>(`${this.apiUrl}/users/me`);

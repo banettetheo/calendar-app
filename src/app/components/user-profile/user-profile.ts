@@ -35,16 +35,27 @@ export class UserProfileComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        // Subscribe to the reactive user stream
+        this.userService.currentUser$.subscribe({
+            next: (user) => {
+                if (user) {
+                    this.user = user;
+                    this.isLoading = false;
+                }
+            },
+            error: (err) => {
+                console.error('Error loading profile:', err);
+                this.isLoading = false;
+            }
+        });
+
+        // Initial load
         this.reloadUserProfile();
     }
 
     reloadUserProfile(): void {
         this.isLoading = true;
-        this.userService.getMe().subscribe({
-            next: (user) => {
-                this.user = user;
-                this.isLoading = false;
-            },
+        this.userService.loadAndSetCurrentUser().subscribe({
             error: (err) => {
                 console.error('Error loading profile:', err);
                 this.isLoading = false;
@@ -84,13 +95,12 @@ export class UserProfileComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                // Update the UnifiedUser with the new values directly
-                this.user = {
-                    ...this.user,
+                // Update the user in the service - this will automatically propagate to all components
+                this.userService.updateCurrentUser({
                     firstName: result.firstName,
                     lastName: result.lastName,
                     email: result.email
-                };
+                });
             }
         });
     }
