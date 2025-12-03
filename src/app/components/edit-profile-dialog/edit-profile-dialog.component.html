@@ -9,6 +9,21 @@
     <mat-dialog-content>
         <form [formGroup]="profileForm" class="profile-form">
             <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nom d'utilisateur</mat-label>
+                <mat-icon matPrefix>alternate_email</mat-icon>
+                <input matInput formControlName="username" placeholder="votre_username">
+                <mat-error *ngIf="profileForm.get('username')?.hasError('required')">
+                    Le nom d'utilisateur est requis
+                </mat-error>
+                <mat-error *ngIf="profileForm.get('username')?.hasError('minlength')">
+                    Minimum 3 caractères
+                </mat-error>
+                <mat-error *ngIf="profileForm.get('username')?.hasError('pattern')">
+                    Lettres, chiffres, tirets et underscores uniquement
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Prénom</mat-label>
                 <mat-icon matPrefix>person</mat-icon>
                 <input matInput formControlName="firstName" placeholder="Votre prénom">

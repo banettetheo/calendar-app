@@ -78,7 +78,7 @@ export class UserService {
         );
     }
 
-    updateProfile(updates: { firstName: string; lastName: string; email: string }) {
+    updateProfile(updates: { username: string; firstName: string; lastName: string; email: string }) {
         const keycloakUrl = 'http://localhost:8080'; // Should match KEYCLOAK_CONFIG.url
         const realm = 'calendar-app'; // Should match KEYCLOAK_CONFIG.realm
         const accountApiUrl = `${keycloakUrl}/realms/${realm}/account`;
