@@ -115,3 +115,13 @@ body {
   background: linear-gradient(135deg, var(--dark-blue) 0%, var(--dark-orange) 100%);
   background-clip: padding-box;
 }
+
+/* Material Dialog Styling - Harmonize with app design */
+.mat-mdc-dialog-container {
+  border-radius: 24px !important;
+  overflow: hidden;
+}
+
+.mat-mdc-dialog-surface {
+  border-radius: 24px !important;
+}

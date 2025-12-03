@@ -3,6 +3,19 @@
     min-width: 400px;
     max-width: 500px;
     overflow: hidden;
+    animation: dialog-enter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes dialog-enter {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .dialog-header {
@@ -10,28 +23,43 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+    padding-top: 8px;
 
     h2 {
         margin: 0;
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 700;
-        color: var(--text-primary);
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
     .close-button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
         color: var(--text-secondary);
+        transition: all 0.2s ease;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 4px;
-        border-radius: 50%;
-        transition: background 0.2s;
+        background: transparent; // Transparent by default
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-right: 8px;
 
         &:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.05); // Gray background only on hover
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
         }
     }
 }
@@ -122,6 +150,25 @@
     border-top: 1px solid var(--border-default);
 
     button {
-        border-radius: 8px;
+        border-radius: 12px;
+        padding: 10px 24px;
+        font-weight: 600;
+
+        // Save button with gradient (matching edit-profile-dialog)
+        &[color="primary"] {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+
+            &:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            }
+
+            &:disabled {
+                opacity: 0.6;
+            }
+        }
     }
 }

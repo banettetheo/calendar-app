@@ -47,11 +47,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: transparent;
+        background: transparent !important; // Force transparent, override Material defaults
         margin-right: 8px; // Push away from right edge
 
         &:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.05) !important; // Gray background only on hover
             color: var(--text-primary);
             transform: rotate(90deg);
         }
