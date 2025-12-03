@@ -86,18 +86,32 @@ export class UserService {
         return this.http.post(accountApiUrl, updates);
     }
 
-    uploadAvatar(file: File): Observable<any> {
-        // Mock implementation for now, or use a real endpoint if available
-        // const formData = new FormData();
-        // formData.append('avatar', file);
-        // return this.http.post(`${this.apiUrl}/users/me/avatar`, formData);
+    uploadAvatar(file: File): Observable<{ profilePicUrl: string }> {
+        const formData = new FormData();
+        formData.append('file', file);
 
-        // Simulate delay and success
-        return new Observable(observer => {
-            setTimeout(() => {
-                observer.next({ success: true });
-                observer.complete();
-            }, 1000);
-        });
+        console.log('📤 Uploading avatar file:', file.name, file.type, file.size);
+
+        // Backend returns a plain string (the URL), not a JSON object
+        return this.http.post(`${this.apiUrl}/users/me/profilePicture`, formData, { responseType: 'text' }).pipe(
+            map(url => {
+                console.log('✅ Upload successful, URL received:', url);
+                // Convert string response to expected object format
+                return { profilePicUrl: url };
+            }),
+            tap(response => {
+                // Update the current user with the new avatar URL
+                this.updateCurrentUser({ profilePicUrl: response.profilePicUrl });
+                console.log('✅ User updated with new avatar URL:', response.profilePicUrl);
+            }),
+            tap({
+                error: (error) => {
+                    console.error('❌ Upload failed with error:', error);
+                    console.error('Error status:', error.status);
+                    console.error('Error message:', error.message);
+                    console.error('Error body:', error.error);
+                }
+            })
+        );
     }
 }

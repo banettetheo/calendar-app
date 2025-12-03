@@ -9,7 +9,7 @@ export interface KeycloakUser {
 
 export interface BusinessUser {
     id: string;
-    avatarUrl?: string;
+    profilePicUrl?: string;
     jobTitle: string;
     department: string;
     location: string;
