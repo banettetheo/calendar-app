@@ -53,6 +53,48 @@
         <mat-icon>{{ item.icon }}</mat-icon>
         <span class="label">{{ item.label }}</span>
       </a>
+
+      <!-- Mobile Profile Button -->
+      <button class="nav-item profile-btn" (click)="toggleMobileMenu()" [class.active]="showMobileMenu">
+        <div class="nav-avatar">
+          <img *ngIf="userProfile?.profilePicUrl" [src]="userProfile?.profilePicUrl" alt="P">
+          <span *ngIf="!userProfile?.profilePicUrl">{{ userProfile?.firstName?.[0] || 'U' }}</span>
+        </div>
+        <span class="label">Moi</span>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" *ngIf="isMobile && showMobileMenu" (click)="closeMobileMenu()">
+      <div class="mobile-menu-content" (click)="$event.stopPropagation()">
+        <div class="mobile-user-header">
+          <div class="avatar-large">
+            <img *ngIf="userProfile?.profilePicUrl" [src]="userProfile?.profilePicUrl" alt="Avatar">
+            <span *ngIf="!userProfile?.profilePicUrl">{{ userProfile?.firstName?.[0] }}{{ userProfile?.lastName?.[0]
+              }}</span>
+          </div>
+          <div class="user-details">
+            <span class="name">{{ userProfile?.firstName }} {{ userProfile?.lastName }}</span>
+            <span class="email">{{ userProfile?.email }}</span>
+          </div>
+        </div>
+
+        <div class="mobile-menu-items">
+          <button class="menu-item" routerLink="/profile" (click)="closeMobileMenu()">
+            <mat-icon>person</mat-icon>
+            <span>Mon Profil</span>
+          </button>
+          <button class="menu-item" routerLink="/friends" (click)="closeMobileMenu()">
+            <mat-icon>group</mat-icon>
+            <span>Mes Amis</span>
+          </button>
+          <div class="divider"></div>
+          <button class="menu-item logout-item" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Déconnexion</span>
+          </button>
+        </div>
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

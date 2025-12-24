@@ -40,6 +40,7 @@ export class MainLayoutComponent implements OnInit {
   isOpened = true;
   userProfile: UnifiedUser | null = null;
   showUserMenu = false;
+  showMobileMenu = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -78,6 +79,14 @@ export class MainLayoutComponent implements OnInit {
 
   toggleSidenav() {
     this.sidenav.toggle();
+  }
+
+  toggleMobileMenu() {
+    this.showMobileMenu = !this.showMobileMenu;
+  }
+
+  closeMobileMenu() {
+    this.showMobileMenu = false;
   }
 
   async logout() {
