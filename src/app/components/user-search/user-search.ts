@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { UserWithStatusDTO } from '../../models/user.model';
+import { UserCardComponent } from '../user-card/user-card';
 
 @Component({
     selector: 'app-user-search',
@@ -17,7 +21,9 @@ import { UserWithStatusDTO } from '../../models/user.model';
         MatButtonModule,
         MatInputModule,
         MatFormFieldModule,
-        FormsModule
+        MatTabsModule,
+        FormsModule,
+        UserCardComponent
     ],
     templateUrl: './user-search.html',
     styleUrl: './user-search.scss'
@@ -28,12 +34,42 @@ export class UserSearchComponent implements OnInit {
     searchQuery = '';
     isLoading = false;
     error: string | null = null;
+    isFriendsMode = false;
+    activeTabIndex = 0;
+    isMobile = false;
+    tabLabels = ['Amis', 'Demandes envoyées', 'Demandes reçues'];
 
-    // Mock names removed as userName is provided
-
-    constructor(private userService: UserService) { }
+    constructor(
+        private userService: UserService,
+        private route: ActivatedRoute,
+        private breakpointObserver: BreakpointObserver
+    ) { }
 
     ngOnInit() {
+        this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+            this.isMobile = result.matches;
+        });
+
+        this.route.data.subscribe(data => {
+            this.isFriendsMode = data['mode'] === 'friends';
+            this.loadUsers();
+        });
+    }
+
+    nextTab() {
+        if (this.activeTabIndex < 2) {
+            this.onTabChange(this.activeTabIndex + 1);
+        }
+    }
+
+    prevTab() {
+        if (this.activeTabIndex > 0) {
+            this.onTabChange(this.activeTabIndex - 1);
+        }
+    }
+
+    onTabChange(index: number) {
+        this.activeTabIndex = index;
         this.loadUsers();
     }
 
@@ -41,9 +77,33 @@ export class UserSearchComponent implements OnInit {
         this.isLoading = true;
         this.error = null;
 
-        this.userService.searchUsers().subscribe({
+        let request$;
+
+        if (this.isFriendsMode) {
+            let status = 'FRIENDS';
+            if (this.activeTabIndex === 1) status = 'PENDING_OUTGOING';
+            if (this.activeTabIndex === 2) status = 'PENDING_INCOMING';
+            request$ = this.userService.searchUsers(status);
+        } else {
+            request$ = this.userService.searchUsers();
+        }
+
+        request$.subscribe({
             next: (users) => {
-                this.users = users;
+                // If in friends mode, manually inject the status as the API doesn't return it
+                if (this.isFriendsMode) {
+                    let inferredStatus: 'FRIENDS' | 'PENDING_OUTGOING' | 'PENDING_INCOMING' = 'FRIENDS';
+                    if (this.activeTabIndex === 1) inferredStatus = 'PENDING_OUTGOING';
+                    if (this.activeTabIndex === 2) inferredStatus = 'PENDING_INCOMING';
+
+                    this.users = users.map(user => ({
+                        ...user,
+                        relationStatus: inferredStatus
+                    }));
+                } else {
+                    this.users = users;
+                }
+
                 this.filteredUsers = this.users;
                 this.isLoading = false;
             },
@@ -68,25 +128,7 @@ export class UserSearchComponent implements OnInit {
         });
     }
 
-    getInitials(user: UserWithStatusDTO): string {
-        return user.userName.substring(0, 2).toUpperCase();
-    }
 
-    // joinedDate removed from DTO
-    /*
-    formatJoinedDate(dateString: string): string {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-    */
-
-    shouldShowButton(status: string): boolean {
-        return status === 'NOT_FRIENDS';
-    }
 
     onAddFriend(user: UserWithStatusDTO) {
         // To be implemented later

@@ -1,0 +1,38 @@
+<div class="user-card">
+    <div class="card-content">
+        <div class="avatar-section">
+            <div class="avatar">
+                <img *ngIf="user.profilePicUrl" [src]="user.profilePicUrl" [alt]="user.userName">
+                <span *ngIf="!user.profilePicUrl">{{ getInitials(user) }}</span>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <h3 class="user-name">{{ user.userName }}</h3>
+        </div>
+
+        <div class="action-section">
+            <button *ngIf="user.relationStatus === 'NONE'" mat-raised-button class="add-friend-btn"
+                (click)="onAddClick()">
+                <mat-icon>person_add</mat-icon>
+                Ajouter
+            </button>
+
+            <div *ngIf="user.relationStatus === 'FRIENDS' && showFriendBadge" class="status-badge status-friends">
+                <mat-icon>check_circle</mat-icon>
+                <span>Amis</span>
+            </div>
+
+            <div *ngIf="user.relationStatus === 'SENT_BY_ME'" class="status-badge status-pending_sent">
+                <mat-icon>schedule</mat-icon>
+                <span>En attente</span>
+            </div>
+
+            <button *ngIf="user.relationStatus === 'SENT_BY_THEM' || user.relationStatus === 'PENDING_INCOMING'"
+                mat-raised-button class="accept-friend-btn" (click)="onAcceptClick()">
+                <mat-icon>check</mat-icon>
+                Accepter
+            </button>
+        </div>
+    </div>
+</div>

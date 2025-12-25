@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, from, map, switchMap, zip, BehaviorSubject, tap } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
@@ -115,7 +115,11 @@ export class UserService {
         );
     }
 
-    searchUsers(): Observable<UserWithStatusDTO[]> {
-        return this.http.get<UserWithStatusDTO[]>(`${this.apiUrl}/social-service/users`);
+    searchUsers(relationStatus?: string): Observable<UserWithStatusDTO[]> {
+        let params = new HttpParams();
+        if (relationStatus) {
+            params = params.set('friendshipStatus', relationStatus);
+        }
+        return this.http.get<UserWithStatusDTO[]>(`${this.apiUrl}/social-service/users`, { params });
     }
 }

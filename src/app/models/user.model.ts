@@ -39,5 +39,5 @@ export interface UserWithStatusDTO {
     userId: number;
     userName: string;
     profilePicUrl?: string;
-    relationStatus: 'SENT_BY_ME' | 'SENT_BY_THEM' | 'FRIENDS' | 'NONE';
+    relationStatus: 'SENT_BY_ME' | 'SENT_BY_THEM' | 'FRIENDS' | 'NONE' | 'PENDING_INCOMING' | 'PENDING_OUTGOING';
 }

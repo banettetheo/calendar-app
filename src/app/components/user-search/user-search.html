@@ -1,10 +1,11 @@
 <div class="user-search-container">
     <div class="header">
         <h1 class="title">
-            <mat-icon>people</mat-icon>
-            Rechercher des utilisateurs
+            <mat-icon>{{ isFriendsMode ? 'group' : 'people' }}</mat-icon>
+            {{ isFriendsMode ? 'Mes Amis' : 'Rechercher des utilisateurs' }}
         </h1>
-        <p class="subtitle">Trouvez et connectez-vous avec d'autres utilisateurs</p>
+        <p class="subtitle">{{ isFriendsMode ? 'Vos amis et demandes en attente' : 'Trouvez et connectez-vous avec
+            d\'autres utilisateurs' }}</p>
     </div>
 
     <div class="search-bar">
@@ -19,74 +20,58 @@
         </mat-form-field>
     </div>
 
+    <!-- Tabs (Persistent) -->
+    <!-- Tabs (Persistent) -->
+    <div class="tabs-container" *ngIf="isFriendsMode">
+        <!-- Desktop Tabs -->
+        <mat-tab-group *ngIf="!isMobile" [selectedIndex]="activeTabIndex" (selectedIndexChange)="onTabChange($event)"
+            animationDuration="0ms">
+            <mat-tab label="Amis"></mat-tab>
+            <mat-tab label="Demandes envoyées"></mat-tab>
+            <mat-tab label="Demandes reçues"></mat-tab>
+        </mat-tab-group>
+
+        <!-- Mobile Tabs Navigation -->
+        <div class="mobile-tabs-nav" *ngIf="isMobile">
+            <button mat-icon-button (click)="prevTab()" [disabled]="activeTabIndex === 0">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="current-tab-label">{{ tabLabels[activeTabIndex] }}</span>
+            <button mat-icon-button (click)="nextTab()" [disabled]="activeTabIndex === 2">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
     <div class="loading-state" *ngIf="isLoading">
         <div class="spinner"></div>
         <p>Chargement des utilisateurs...</p>
     </div>
 
+    <!-- Error State -->
     <div class="error-state" *ngIf="error && !isLoading">
         <mat-icon>error_outline</mat-icon>
         <p>{{ error }}</p>
         <button mat-raised-button (click)="loadUsers()">Réessayer</button>
     </div>
 
-    <div class="users-grid" *ngIf="!isLoading && !error">
-        <div class="empty-state" *ngIf="filteredUsers.length === 0">
-            <mat-icon>person_search</mat-icon>
-            <p>Aucun utilisateur trouvé</p>
-            <span class="hint">Essayez une autre recherche</span>
-        </div>
-
-        <div class="user-card" *ngFor="let user of filteredUsers">
-            <div class="card-content">
-                <div class="avatar-section">
-                    <div class="avatar">
-                        <img *ngIf="user.profilePicUrl" [src]="user.profilePicUrl" [alt]="user.userName">
-                        <span *ngIf="!user.profilePicUrl">{{ getInitials(user) }}</span>
-                    </div>
-                </div>
-
-                <div class="user-info">
-                    <h3 class="user-name">{{ user.userName }}</h3>
-                    <!-- Joined date removed from DTO
-                    <div class="user-meta">
-                        <div class="meta-item">
-                            <mat-icon>calendar_today</mat-icon>
-                            <span>Membre depuis {{ formatJoinedDate(user.joinedDate) }}</span>
-                        </div>
-                    </div>
-                    -->
-                </div>
-
-                <!-- Unified action/status section -->
-                <div class="action-section">
-                    <!-- Add friend button for NONE -->
-                    <button *ngIf="user.relationStatus === 'NONE'" mat-raised-button class="add-friend-btn"
-                        (click)="onAddFriend(user)">
-                        <mat-icon>person_add</mat-icon>
-                        Ajouter
-                    </button>
-
-                    <!-- Friends status badge -->
-                    <div *ngIf="user.relationStatus === 'FRIENDS'" class="status-badge status-friends">
-                        <mat-icon>check_circle</mat-icon>
-                        <span>Amis</span>
-                    </div>
-
-                    <!-- Pending sent status badge -->
-                    <div *ngIf="user.relationStatus === 'SENT_BY_ME'" class="status-badge status-pending_sent">
-                        <mat-icon>schedule</mat-icon>
-                        <span>En attente</span>
-                    </div>
-
-                    <!-- Accept friend request button for SENT_BY_THEM -->
-                    <button *ngIf="user.relationStatus === 'SENT_BY_THEM'" mat-raised-button class="accept-friend-btn"
-                        (click)="onAcceptFriend(user)">
-                        <mat-icon>check</mat-icon>
-                        Accepter
-                    </button>
-                </div>
-            </div>
-        </div>
+    <!-- Content -->
+    <div class="content-wrapper" *ngIf="!isLoading && !error">
+        <ng-container *ngTemplateOutlet="usersGrid"></ng-container>
     </div>
+
+    <ng-template #usersGrid>
+        <div class="users-grid">
+            <div class="empty-state" *ngIf="filteredUsers.length === 0">
+                <mat-icon>person_search</mat-icon>
+                <p>Aucun utilisateur trouvé</p>
+                <span class="hint">Essayez une autre recherche</span>
+            </div>
+
+            <app-user-card *ngFor="let user of filteredUsers" [user]="user" [showFriendBadge]="!isFriendsMode"
+                (addFriend)="onAddFriend($event)" (acceptFriend)="onAcceptFriend($event)">
+            </app-user-card>
+        </div>
+    </ng-template>
 </div>
