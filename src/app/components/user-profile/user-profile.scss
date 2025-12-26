@@ -1,4 +1,5 @@
-.profile-container {
+.profile-container,
+.skeleton-profile-container {
     max-width: 1200px;
     margin: 0 auto;
     padding-bottom: 40px;
@@ -17,7 +18,8 @@
     }
 }
 
-.profile-header {
+.profile-header,
+.skeleton-profile-header {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
     border-radius: 24px;

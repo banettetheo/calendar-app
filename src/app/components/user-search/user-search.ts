@@ -6,11 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { SocialService } from '../../services/social.service';
 import { UserWithStatusDTO } from '../../models/user.model';
 import { UserCardComponent } from '../user-card/user-card';
+import { AddFriendDialogComponent } from '../add-friend-dialog/add-friend-dialog';
 
 @Component({
     selector: 'app-user-search',
@@ -22,6 +25,7 @@ import { UserCardComponent } from '../user-card/user-card';
         MatInputModule,
         MatFormFieldModule,
         MatTabsModule,
+        MatDialogModule,
         FormsModule,
         UserCardComponent
     ],
@@ -41,8 +45,10 @@ export class UserSearchComponent implements OnInit {
 
     constructor(
         private userService: UserService,
+        private socialService: SocialService,
         private route: ActivatedRoute,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit() {
@@ -68,6 +74,19 @@ export class UserSearchComponent implements OnInit {
         }
     }
 
+    openAddFriendDialog() {
+        const dialogRef = this.dialog.open(AddFriendDialogComponent, {
+            width: '450px',
+            maxWidth: '90vw'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.loadUsers();
+            }
+        });
+    }
+
     onTabChange(index: number) {
         this.activeTabIndex = index;
         this.loadUsers();
@@ -83,9 +102,9 @@ export class UserSearchComponent implements OnInit {
             let status = 'FRIENDS';
             if (this.activeTabIndex === 1) status = 'PENDING_OUTGOING';
             if (this.activeTabIndex === 2) status = 'PENDING_INCOMING';
-            request$ = this.userService.searchUsers(status);
+            request$ = this.socialService.searchUsers(status);
         } else {
-            request$ = this.userService.searchUsers();
+            request$ = this.socialService.searchUsers();
         }
 
         request$.subscribe({

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, from, map, switchMap, zip, BehaviorSubject, tap } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
-import { UnifiedUser, BusinessUser, UserWithStatusDTO } from '../models/user.model';
+import { UnifiedUser, BusinessUser } from '../models/user.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
-    private apiUrl = environment.apiUrl;
+    private apiUrl = `${environment.apiUrl}/user-service`;
 
     // BehaviorSubject to hold the current user state
     private currentUserSubject = new BehaviorSubject<UnifiedUser | null>(null);
@@ -59,7 +59,7 @@ export class UserService {
      */
     getMe(): Observable<UnifiedUser> {
         const keycloakProfile$ = from(this.keycloak.loadUserProfile());
-        const apiUser$ = this.http.get<BusinessUser>(`${this.apiUrl}/user-service/profile`);
+        const apiUser$ = this.http.get<BusinessUser>(`${this.apiUrl}/profile`);
 
         return zip(keycloakProfile$, apiUser$).pipe(
             map(([profile, apiUser]) => {
@@ -70,6 +70,7 @@ export class UserService {
                     email: profile.email,
                     firstName: profile.firstName,
                     lastName: profile.lastName,
+                    hashtag: apiUser.hashtag,
                     roles: this.keycloak.getUserRoles(),
                     originalJoinedDate: apiUser.joinedDate,
                     parsedJoinedDate: new Date(apiUser.joinedDate)
@@ -93,7 +94,7 @@ export class UserService {
         console.log('📤 Uploading avatar file:', file.name, file.type, file.size);
 
         // Backend returns a plain string (the URL), not a JSON object
-        return this.http.post(`${this.apiUrl}/user-service/profile/picture`, formData, { responseType: 'text' }).pipe(
+        return this.http.post(`${this.apiUrl}/profile/picture`, formData, { responseType: 'text' }).pipe(
             map(url => {
                 console.log('✅ Upload successful, URL received:', url);
                 // Convert string response to expected object format
@@ -113,13 +114,5 @@ export class UserService {
                 }
             })
         );
-    }
-
-    searchUsers(relationStatus?: string): Observable<UserWithStatusDTO[]> {
-        let params = new HttpParams();
-        if (relationStatus) {
-            params = params.set('friendshipStatus', relationStatus);
-        }
-        return this.http.get<UserWithStatusDTO[]>(`${this.apiUrl}/social-service/users`, { params });
     }
 }

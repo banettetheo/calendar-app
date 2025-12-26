@@ -10,6 +10,7 @@ export interface KeycloakUser {
 export interface BusinessUser {
     id: string;
     profilePicUrl?: string;
+    hashtag: string;
     jobTitle: string;
     department: string;
     location: string;

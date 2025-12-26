@@ -125,3 +125,60 @@ body {
 .mat-mdc-dialog-surface {
   border-radius: 24px !important;
 }
+
+/* Skeleton Loader Styles */
+.skeleton {
+  background: #f0f2f5;
+  background: linear-gradient(90deg, #f0f2f5 25%, #e0e4e8 50%, #f0f2f5 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.skeleton-title {
+  height: 2rem;
+  margin-bottom: 1rem;
+  width: 60%;
+}
+
+.skeleton-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.skeleton-banner {
+  height: 180px;
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+}
+
+.skeleton-card {
+  height: 200px;
+  width: 100%;
+  border-radius: 16px;
+}
+
+.skeleton-chip {
+  height: 32px;
+  width: 80px;
+  border-radius: 16px;
+  display: inline-block;
+  margin-right: 8px;
+}

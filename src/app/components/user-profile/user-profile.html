@@ -1,3 +1,47 @@
+<div class="skeleton-profile-container" *ngIf="isLoading">
+    <div class="profile-header">
+        <div class="banner skeleton"></div>
+        <div class="header-content">
+            <div class="avatar-container">
+                <div class="avatar skeleton"></div>
+            </div>
+            <div class="user-identity">
+                <div class="skeleton skeleton-title"></div>
+                <div class="badges">
+                    <div class="skeleton skeleton-chip"></div>
+                    <div class="skeleton skeleton-chip"></div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="skeleton skeleton-chip" style="width: 100px; height: 40px; border-radius: 12px;"></div>
+                <div class="skeleton skeleton-chip" style="width: 100px; height: 40px; border-radius: 12px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-grid">
+        <div class="main-info">
+            <div class="stats-row">
+                <div class="stat-card skeleton"></div>
+                <div class="stat-card skeleton"></div>
+                <div class="stat-card skeleton"></div>
+            </div>
+            <div class="info-card">
+                <div class="skeleton skeleton-title" style="width: 30%;"></div>
+                <div class="details-list">
+                    <div class="detail-item" *ngFor="let i of [1,2,3,4]">
+                        <div class="skeleton skeleton-text" style="width: 40%; height: 20px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 25%; height: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="secondary-info">
+            <div class="info-card skeleton" style="height: 320px; border: none;"></div>
+        </div>
+    </div>
+</div>
+
 <div class="profile-container fade-in" *ngIf="!isLoading && user">
     <!-- Header Section -->
     <div class="profile-header">
