@@ -41,6 +41,7 @@ export class MainLayoutComponent implements OnInit {
   userProfile: UnifiedUser | null = null;
   showUserMenu = false;
   showMobileMenu = false;
+  showCopySuccess = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -91,5 +92,14 @@ export class MainLayoutComponent implements OnInit {
 
   async logout() {
     await this.keycloak.logout(window.location.origin);
+  }
+
+  copyUserTag() {
+    if (!this.userProfile) return;
+    const tag = `${this.userProfile.username}#${this.userProfile.hashtag}`;
+    navigator.clipboard.writeText(tag).then(() => {
+      this.showCopySuccess = true;
+      setTimeout(() => this.showCopySuccess = false, 2000);
+    });
   }
 }

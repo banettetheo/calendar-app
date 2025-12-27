@@ -80,6 +80,7 @@
 
         .add-friend-btn,
         .accept-friend-btn,
+        .decline-friend-btn,
         .status-badge {
             padding: 0.6rem 1.5rem;
             border-radius: 10px;
@@ -137,6 +138,37 @@
             }
         }
 
+        .decline-friend-btn {
+            background: #fef2f2; // Light red
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            box-shadow: none;
+            cursor: pointer;
+
+            &:hover {
+                background: #fee2e2;
+                transform: translateY(-2px);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+
+            .accept-friend-btn,
+            .decline-friend-btn {
+                flex: 1;
+                max-width: none; // Allow flex to take over
+                padding: 0.6rem 0.5rem; // Less side padding for mobile/small boxes
+            }
+        }
+
         .status-badge {
             &.status-friends {
                 background: rgba(34, 197, 94, 0.1);
@@ -179,16 +211,21 @@
 // Responsive adjustments
 @media (max-width: 768px) {
     .user-card {
-        min-height: 300px;
+        min-height: 180px;
 
         .card-content {
             padding: 1rem;
+            gap: 0.5rem;
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
-            font-size: 2rem;
+            width: 70px;
+            height: 70px;
+            font-size: 1.5rem;
+        }
+
+        .user-info .user-name {
+            font-size: 1.1rem;
         }
     }
 }

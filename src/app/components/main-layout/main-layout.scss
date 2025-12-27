@@ -192,6 +192,38 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
+
+            .tag-container {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                margin-top: 2px;
+
+                .copy-btn {
+                    background: transparent;
+                    border: none;
+                    padding: 2px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--text-secondary);
+                    transition: all 0.2s ease;
+                    flex-shrink: 0;
+
+                    mat-icon {
+                        font-size: 14px;
+                        width: 14px;
+                        height: 14px;
+                    }
+
+                    &:hover {
+                        background: rgba(59, 130, 246, 0.1);
+                        color: var(--primary-blue);
+                    }
+                }
+            }
         }
 
         .user-menu {
@@ -431,6 +463,36 @@
                 .email {
                     font-size: 14px;
                     color: var(--text-secondary);
+                }
+
+                .tag-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-top: 4px;
+
+                    .copy-btn {
+                        background: rgba(59, 130, 246, 0.1);
+                        border: none;
+                        padding: 6px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--primary-blue);
+                        transition: all 0.2s ease;
+
+                        mat-icon {
+                            font-size: 18px;
+                            width: 18px;
+                            height: 18px;
+                        }
+
+                        &:active {
+                            transform: scale(0.9);
+                        }
+                    }
                 }
             }
         }

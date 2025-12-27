@@ -30,9 +30,17 @@ export class SocialService {
         return this.http.post(`${this.apiUrl}/friendships/request`, { userTag });
     }
 
-    // Accept friend (stub for now)
-    acceptFriend(friendId: number): Observable<any> {
-        // Placeholder for future implementation
-        return this.http.post(`${this.apiUrl}/friendships/accept/${friendId}`, {});
+    /**
+     * Accept an incoming friend request
+     */
+    acceptFriend(userId: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/friendships/accept/${userId}`, {});
+    }
+
+    /**
+     * Decline an incoming friend request
+     */
+    declineFriend(userId: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/friendships/decline/${userId}`, {});
     }
 }

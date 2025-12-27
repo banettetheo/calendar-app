@@ -16,6 +16,7 @@ export class UserCardComponent {
     @Input() showFriendBadge = true;
     @Output() addFriend = new EventEmitter<UserWithStatusDTO>();
     @Output() acceptFriend = new EventEmitter<UserWithStatusDTO>();
+    @Output() declineFriend = new EventEmitter<UserWithStatusDTO>();
 
     getInitials(user: UserWithStatusDTO): string {
         return user.userName ? user.userName.substring(0, 2).toUpperCase() : 'U';
@@ -27,5 +28,9 @@ export class UserCardComponent {
 
     onAcceptClick() {
         this.acceptFriend.emit(this.user);
+    }
+
+    onDeclineClick() {
+        this.declineFriend.emit(this.user);
     }
 }

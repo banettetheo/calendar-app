@@ -155,7 +155,30 @@ export class UserSearchComponent implements OnInit {
     }
 
     onAcceptFriend(user: UserWithStatusDTO) {
-        // To be implemented later
-        console.log('Accept friend request:', user);
+        this.isLoading = true;
+        this.socialService.acceptFriend(user.userId).subscribe({
+            next: () => {
+                this.loadUsers();
+            },
+            error: (err) => {
+                console.error('Error accepting friend request:', err);
+                this.isLoading = false;
+                this.error = 'Impossible d\'accepter la demande';
+            }
+        });
+    }
+
+    onDeclineFriend(user: UserWithStatusDTO) {
+        this.isLoading = true;
+        this.socialService.declineFriend(user.userId).subscribe({
+            next: () => {
+                this.loadUsers();
+            },
+            error: (err) => {
+                console.error('Error declining friend request:', err);
+                this.isLoading = false;
+                this.error = 'Impossible de refuser la demande';
+            }
+        });
     }
 }

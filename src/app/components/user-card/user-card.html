@@ -28,11 +28,17 @@
                 <span>En attente</span>
             </div>
 
-            <button *ngIf="user.relationStatus === 'SENT_BY_THEM' || user.relationStatus === 'PENDING_INCOMING'"
-                mat-raised-button class="accept-friend-btn" (click)="onAcceptClick()">
-                <mat-icon>check</mat-icon>
-                Accepter
-            </button>
+            <div *ngIf="user.relationStatus === 'SENT_BY_THEM' || user.relationStatus === 'PENDING_INCOMING'"
+                class="request-actions">
+                <button mat-stroked-button class="decline-friend-btn" (click)="onDeclineClick()">
+                    <mat-icon>close</mat-icon>
+                    Refuser
+                </button>
+                <button mat-raised-button class="accept-friend-btn" (click)="onAcceptClick()">
+                    <mat-icon>check</mat-icon>
+                    Accepter
+                </button>
+            </div>
         </div>
     </div>
 </div>
