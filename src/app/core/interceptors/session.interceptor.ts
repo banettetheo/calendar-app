@@ -23,10 +23,10 @@ export class SessionInterceptor implements HttpInterceptor {
                                 // On tente de rafraîchir le token
                                 return from(this.keycloak.updateToken(20)).pipe(
                                     switchMap(() => {
-                                        // On renvoie l'erreur originale, KeycloakBearerInterceptor 
-                                        // devrait normalement gérer le retry si configuré, 
-                                        // sinon l'utilisateur verra l'erreur et devra recharger.
-                                        return throwError(() => error);
+                                        // On rejoue la requête originale
+                                        // Elle sera interceptée à nouveau par KeycloakBearerInterceptor
+                                        // qui y ajoutera le nouveau token.
+                                        return next.handle(request);
                                     }),
                                     catchError(() => {
                                         this.keycloak.login();
